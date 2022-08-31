@@ -583,4 +583,272 @@ namespace Level_1
             return s;
         }
     }
+
+    // 부족한 금액 계산하기
+    public class CalculateTheShortfall
+    {
+        public long solution(int price, int money, int count)
+        {
+            long sum = 0;
+            long answer = 0;
+
+            for (int i = 1; i <= count; i++)
+            {
+                sum += (long)price * i;
+            }
+
+            answer = sum - money;
+
+            return answer <= 0 ? 0 : answer;
+        }
+    }
+
+    // 나머지가 1이 되는 수 찾기
+    public class FindNumberRemainderOne
+    {
+        public int solution(int n)
+        {
+            int answer = 0;
+            int num = 0;
+
+            for (int i = 2; i < n - 1; ++i)
+            {
+                if ((n - 1) % i == 0)
+                {
+                    num = i;
+                    break;
+                }
+            }
+
+            if (num == 0)
+                answer = n - 1;
+            else
+                answer = num;
+
+            return answer;
+        }
+    }
+
+    // 2016년
+    public class Year2016
+    {
+        public string solution(int a, int b)
+        {
+            DateTime now = new DateTime(2016, a, b);
+
+            string answer = now.DayOfWeek.ToString();
+
+            answer = answer.Substring(0, 3).ToUpper();
+            return answer;
+        }
+    }
+
+    // 두 개 뽑아서 더하기
+    public class TwoChoicePlus
+    {
+        public int[] solution(int[] numbers)
+        {
+            int[] answer;
+            List<int> result = new List<int>();
+
+            for (int i = 0; i < numbers.Length; i++)
+            {
+                for (int j = i + 1; j < numbers.Length; j++)
+                {
+                    if (!result.Contains(numbers[i] + numbers[j]))
+                        result.Add(numbers[i] + numbers[j]);
+                }
+            }
+
+            result.Sort();
+
+            answer = new int[result.Count];
+
+            for (int i = 0; i < result.Count; i++)
+            {
+                answer[i] = result[i];
+            }
+
+            return answer;
+        }
+    }
+
+    // 예산
+    public class Budget
+    {
+        public int solution(int[] d, int budget)
+        {
+            Array.Sort(d);
+
+            int count = 0;
+
+            for (int i = 0; i < d.Length; i++)
+            {
+                if (budget >= d[i])
+                {
+                    budget -= d[i];
+                    count++;
+                }
+            }
+
+            return count;
+        }
+    }
+
+    // 3진법 뒤집기
+    public class TernaryFlip
+    {
+        public int solution(int n)
+        {
+            Stack<int> value = new Stack<int>();
+            int k = n;
+
+            while (true)
+            {
+                if (k >= 3)
+                {
+                    value.Push(k % 3);
+                    k = k / 3;
+                }
+                else
+                {
+                    value.Push(k);
+                    break;
+                }
+            }
+
+            int sum = 0;
+
+            int count = value.Count;
+
+            for (int i = 0; i < count; i++)
+            {
+                sum += (int)(value.Pop() * Math.Pow(3, i));
+            }
+
+            Console.WriteLine(sum);
+
+            return sum;
+        }
+    }
+
+    // 약수의 개수와 덧셈
+    public class NumberAndAdditionOfFactors
+    {
+        public int solution(int left, int right)
+        {
+            int answer = 0;
+
+            for (int i = left; i <= right; i++)
+            {
+                int count = 0;
+                for (int j = 1; j <= i; j++)
+                {
+                    if (i % j == 0)
+                        count++;
+                }
+
+                if (count % 2 == 0)
+                    answer += i;
+                else
+                    answer -= i;
+            }
+
+            return answer;
+        }
+    }
+
+    // 체육복
+    public class GymSuit
+    {
+        public int solution(int n, int[] lost, int[] reserve)
+        {
+            List<int> LostList = new List<int>(lost);
+            List<int> ReserveList = new List<int>(reserve);
+            List<int> RemoveList = new List<int>();
+
+            int answer = 0;
+
+            foreach (var num1 in LostList)
+            {
+                foreach (var num2 in ReserveList)
+                {
+                    if (num1 == num2)
+                    {
+                        RemoveList.Add(num2);
+                        break;
+                    }
+                }
+            }
+
+            foreach (var num in RemoveList)
+            {
+                LostList.Remove(num);
+                ReserveList.Remove(num);
+            }
+
+            for (int i = 0; i < LostList.Count; i++)
+            {
+                int left = LostList[i] - 1;
+                int right = LostList[i] + 1;
+
+                foreach (var num in ReserveList)
+                {
+                    if (num == left || num == right)
+                    {
+                        ReserveList.Remove(num);
+                        answer++;
+                        break;
+                    }
+                }
+            }
+
+            return n - (LostList.Count - answer);
+        }
+    }
+
+    // 모의고사
+    public class MockExam
+    {
+        public int[] solution(int[] answers)
+        {
+            int[] man1 = new int[] { 1, 2, 3, 4, 5 }; // 5반복
+            int[] man2 = new int[] { 2, 1, 2, 3, 2, 4, 2, 5, }; // 8반복
+            int[] man3 = new int[] { 3, 3, 1, 1, 2, 2, 4, 4, 5, 5 }; // 10반복
+            int[] check = new int[3];
+
+            int max = 0;
+            List<int> man = new List<int>();
+
+            for (int i = 0; i < answers.Length; i++)
+            {
+                if (answers[i] == man1[i % 5])
+                {
+                    check[0]++;
+                }
+                if (answers[i] == man2[i % 8])
+                {
+                    check[1]++;
+                }
+                if (answers[i] == man3[i % 10])
+                {
+                    check[2]++;
+                }
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                if (max < check[i])
+                    max = check[i];
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                if (max == check[i])
+                    man.Add(i + 1);
+            }
+
+            return man.ToArray();
+        }
+    }
 }
