@@ -851,4 +851,242 @@ namespace Level_1
             return man.ToArray();
         }
     }
+
+    // K번째 수
+    public class KNumber
+    {
+        public int[] solution(int[] array, int[,] commands)
+        {
+            int lenth = commands.Length / 3;
+
+            List<List<int>> datas = new List<List<int>>();
+
+            for (int i = 0; i < lenth; i++)
+            {
+                datas.Add(new List<int>(array));
+            }
+
+            int[] answer = new int[commands.Length / 3];
+
+            for (int i = 0; i < datas.Count; i++)
+            {
+                datas[i] = datas[i].GetRange(commands[i, 0] - 1, (commands[i, 1] - 1) - (commands[i, 0] - 1) + 1);
+                datas[i].Sort();
+                answer[i] = datas[i][commands[i, 2] - 1];
+            }
+
+            return answer;
+        }
+    }
+
+    public class DecimalNumbersCreate
+    {
+        public int solution(int[] nums)
+        {
+            int count = 0;
+            for (int i = 0; i < nums.Length - 2; i++)
+            {
+                for (int j = i + 1; j < nums.Length - 1; j++)
+                {
+                    for (int k = j + 1; k < nums.Length; k++)
+                    {
+                        int num = nums[i] + nums[j] + nums[k];
+
+                        bool check = false;
+
+                        for (int t = 2; t < num; t++)
+                        {
+                            if (num % t == 0)
+                            {
+                                check = true;
+                                break;
+                            }
+                        }
+
+                        if (!check)
+                            count++;
+                    }
+                }
+            }
+
+            return count;
+        }
+    }
+
+    // 내적
+    public class DotProduct
+    {
+        public int solution(int[] a, int[] b)
+        {
+            int count = 0;
+            for (int i = 0; i < a.Length; i++)
+            {
+                count += a[i] * b[i];
+            }
+
+            return count;
+        }
+    }
+
+    //음양 더하기
+    public class PlusMinusFusion
+    {
+        public int solution(int[] absolutes, bool[] signs)
+        {
+            int count = 0;
+
+            for (int i = 0; i < absolutes.Length; i++)
+            {
+                if (signs[i])
+                    count += absolutes[i];
+                else
+                    count -= absolutes[i];
+            }
+
+            return count;
+        }
+    }
+
+    // 없는 숫자 더하기
+    public class NoneNumberPlus
+    {
+        public int solution(int[] numbers)
+        {
+            int answer = 0;
+
+            for (int i = 0; i < numbers.Length; ++i)
+                answer += numbers[i];
+
+            return 45 - answer;
+        }
+    }
+
+    // 숫자 문자열과 영단어
+    public class NumberStringEnglishWords
+    {
+        public int solution(string s)
+        {
+            Dictionary<string, string> dicStr = new Dictionary<string, string>()
+        {
+             {"zero","0" },
+             {"one","1" },
+             {"two","2" },
+             {"three","3" },
+             {"four","4" },
+             {"five","5" },
+             {"six","6" },
+             {"seven","7" },
+             {"eight","8" },
+             {"nine","9" },
+         };
+
+            foreach (var data in dicStr)
+            {
+                s = s.Replace(data.Key, data.Value);
+            }
+            int num = int.Parse(s);
+
+            return num;
+        }
+    }
+
+    // 로또의 최고 순위와 최저 순위
+    public class LottoHighLowGrade
+    {
+        public int[] solution(int[] lottos, int[] win_nums)
+        {
+            int[] answer = new int[2];
+
+            List<int> lottosList = new List<int>(lottos);
+            List<int> win_numsList = new List<int>(win_nums);
+
+            int count = 0;
+            int etc = 0;
+            // 기본적으로 맞은 수 
+            for (int i = 0; i < lottosList.Count; i++)
+            {
+                if (lottosList[i] == 0)
+                {
+                    etc++;
+                    continue;
+                }
+
+                if (win_numsList.Contains(lottosList[i]))
+                {
+                    count++;
+                }
+            }
+
+            answer[0] = count;
+            answer[1] = count + etc;
+
+            for (int i = 0; i < 2; i++)
+            {
+                switch (answer[i])
+                {
+                    case 2:
+                        answer[i] = 5;
+                        break;
+                    case 3:
+                        answer[i] = 4;
+                        break;
+                    case 4:
+                        answer[i] = 3;
+                        break;
+                    case 5:
+                        answer[i] = 2;
+                        break;
+                    case 6:
+                        answer[i] = 1;
+                        break;
+                    default:
+                        answer[i] = 6;
+                        break;
+                }
+            }
+
+            if (answer[0] > answer[1])
+            {
+                int temp = answer[0];
+                answer[0] = answer[1];
+                answer[1] = temp;
+            }
+
+            return answer;
+        }
+    }
+
+    // 최소 직사각형
+    public class MinRectangle
+    {
+        public int solution(int[,] sizes)
+        {
+            for (int i = 0; i < sizes.GetLength(0); ++i)
+            {
+                int temp = 0;
+                if (sizes[i, 0] < sizes[i, 1])
+                {
+                    temp = sizes[i, 0];
+                    sizes[i, 0] = sizes[i, 1];
+                    sizes[i, 1] = temp;
+                }
+            }
+
+            int maxX = 0;
+            int maxY = 0;
+
+            for (int i = 0; i < sizes.GetLength(0); ++i)
+            {
+                if (maxX < sizes[i, 0])
+                    maxX = sizes[i, 0];
+
+                if (maxY < sizes[i, 1])
+                    maxY = sizes[i, 1];
+            }
+
+            int answer = maxX * maxY;
+
+            return answer;
+        }
+    }
 }
