@@ -14,6 +14,60 @@ namespace Level_2
         }
     }
 
+    // 게임 맵 최단거리
+    public class GameMapMinDistance
+    {
+        int n = 0;
+        int m = 0;
+
+        // 상하좌우
+        int[] dx = { 0, 0, -1, 1 };
+        int[] dy = { -1, 1, 0, 0 };
+
+        Queue<KeyValuePair<int, int>> queue = new Queue<KeyValuePair<int, int>>();
+
+        public int solution(int[,] maps)
+        {
+            n = maps.GetLength(0);
+            m = maps.GetLength(1);
+
+            BFS(0, 0, maps);
+
+            if (maps[n - 1, m - 1] == 1)
+                return -1;
+            else
+                return maps[n - 1, m - 1];
+        }
+
+
+        public void BFS(int i,int j, int[,] maps)
+        {
+            queue.Enqueue(new KeyValuePair<int, int>(i, j));
+
+            while (queue.Count != 0)
+            {
+                KeyValuePair<int, int> keyValue = queue.Dequeue();
+
+                // 4방향 확인 
+                for (int dis = 0; dis < 4; dis++)
+                {
+                    int x = keyValue.Key + dx[dis];
+                    int y = keyValue.Value + dy[dis];
+
+                    // 구역안에 있으며, 이동 가능한 위치
+                    if ((x >= 0 && n > x) && (y >= 0 && m > y) && maps[x, y] == 1)
+                    {
+                        queue.Enqueue(new KeyValuePair<int, int>(x, y));
+                        
+                        // 누적 처리
+                        maps[x, y] = maps[keyValue.Key, keyValue.Value] + 1;
+                    }
+                }
+            }
+        }
+    }
+
+
     // 올바른 괄호
     public class CorrectParenthesis
     {
@@ -144,4 +198,6 @@ namespace Level_2
             return answer;
         }
     }
+
+   
 }
