@@ -10,9 +10,7 @@ namespace Level_2
     {
         public static void Main(string[] args)
         {
-            long data = MaxDistanceJump.solution(4);
-
-            Console.WriteLine("정답은 ? : "+ data.ToString());
+            JadenCaseTextCreate.solution("3people unFollowed me");
         }
     }
 
@@ -229,5 +227,204 @@ namespace Level_2
         }
     }
 
-   
+    // 하노이의 탑
+    public static class HanoiTower
+    {
+        public static List<int> aPoint = new List<int>();
+        public static List<int> bPoint = new List<int>();
+
+        public static int[,] solution(int n)
+        {
+            Move(n, 1, 2, 3);
+
+            int[,] answer = new int[aPoint.Count, 2];
+
+            for (int i = 0; i < aPoint.Count; i++)
+            {
+                answer[i, 0] = aPoint[i];
+                answer[i, 1] = bPoint[i];
+            }
+
+            return answer;
+        }
+
+        public static void Move(int height, int startPoint, int wayPoint, int goalPoint)
+        {
+            if (height <= 1)
+            {
+                // 해당 루트의 마지막 원판 경로 처리
+                aPoint.Add(startPoint);
+                bPoint.Add(goalPoint);
+            }
+            else
+            {
+                // 마지막 원판을 제외한 모든 원판은 출발지에서 경유지로 이동
+                Move(height - 1, startPoint, goalPoint, wayPoint);
+
+                // 마지막 원판 경로 처리
+                aPoint.Add(startPoint);
+                bPoint.Add(goalPoint);
+
+                // 남은 원판 -> 경유지에서 목적지로 이동
+                Move(height - 1, wayPoint, startPoint, goalPoint);
+            }
+        }
+    }
+
+    // 행렬의 곱셈
+    public class MatrixMultiplication
+    {
+        public int[,] solution(int[,] arr1, int[,] arr2)
+        {
+            int[,] answer = new int[arr1.GetLength(0),arr2.GetLength(1)];
+
+            for(int i = 0; i < arr1.GetLength(0); i++)
+            {
+                for(int j = 0; j < arr2.GetLength(1); j++)
+                {
+                    for(int q = 0; q < arr2.GetLength(0); q++)
+                    {
+                        answer[i,j] += arr1[i, q] * arr2[q, j];
+                    }
+                }
+            }
+
+            return answer;
+        }
+    }
+
+    // JadenCase 문자열 만들기
+    public static class JadenCaseTextCreate
+    {
+        public static string solution(string s)
+        {
+            StringBuilder answer = new StringBuilder();
+
+            char[] ch = s.ToLower().ToCharArray();
+
+            answer.Append(ch[0].ToString().ToUpper());
+
+            for (int i = 1; i < ch.Length; i++)
+            {
+                answer.Append(ch[i - 1] == ' ' ? ch[i].ToString().ToUpper() : ch[i].ToString());
+            }
+
+            return answer.ToString();
+        }
+    }
+
+    // N-Queen ( 백트래킹 )
+    public class NQueen
+    {
+        // 2차원 배열로 하다가 실패함 
+        public int[] cols;
+
+        public int solution(int n)
+        {
+            int answer = 0;
+            cols = new int[n];
+
+            answer = QueenRoot(0, n);
+
+            return answer;
+        }
+
+        public int QueenRoot(int queenCount, int max)
+        {
+            int tempAnswer = 0;
+
+            // 모든 퀸을 배치했다면 리턴 ( 행 )
+            if (queenCount == max)
+                return 1;
+            else
+            {
+                // 모든 열 배치 및 체크 
+                for (int i = 0; i < max; i++)
+                {
+                    // 배치 
+                    cols[queenCount] = i;
+
+                    // 상하좌우 대각선 배치 판단 
+                    if (QueenCheck(queenCount) == true)
+                    {
+                        // 가능하다면 다음 퀸 출격 (다음 행)
+                        tempAnswer += QueenRoot(queenCount + 1, max);
+                    }
+                }
+            }
+
+            // 초기화 
+            cols[queenCount] = 0;
+
+            return tempAnswer;
+        }
+
+        public bool QueenCheck(int checkValue)
+        {
+            for (int i = 0; i < checkValue; i++)
+            {
+                // 같은 열인지 체크 ( 상하 라인 )
+                if (cols[checkValue] == cols[i])
+                    return false;
+                // 같은 대각선 체크 ( 대각 라인 = 합산의 절대값이 같음 )
+                else if (Math.Abs(cols[checkValue] - cols[i]) == Math.Abs(checkValue - i))
+                    return false;
+            }
+
+            return true;
+        }
+    }
+
+    // N개의 최소공배수
+    public class MinCommonMultiple
+    {
+        public int solution(int[] arr)
+        {
+            Array.Sort(arr);
+
+            // 최대공약수 GCD(Greatest Common Divisor)
+            int gcd;
+            // 최소공배수 LCM(Least Common Multiple)
+            int lcm = 0;
+
+            // 가장 작은 두 개의 수로 최대공약수를 구한다.
+            gcd = GCD(arr[1], arr[0]);
+            // 최소 공배수 구함
+            lcm = LCM(arr[1], arr[0], gcd);
+
+            // 나머지 모든 수는 곱해서 최대공약수로 나눈다.
+            for (int i = 2; i < arr.Length; i++)
+            {
+                lcm = LCM(lcm, arr[i], gcd);
+            }
+
+            return lcm;
+        }
+
+        // 최대 공약수
+        public int GCD(int bigNum, int smallNum)
+        {
+            int temp = 0;
+
+            while (smallNum != 0)
+            {
+                temp = bigNum % smallNum;
+                bigNum = smallNum;
+                smallNum = temp;
+            }
+
+            return bigNum;
+        }
+
+        // 최소 공배수
+        public int LCM(int bigNum, int smallNum, int gcd)
+        {
+            if (gcd == 0)
+                return 0;
+
+            int result = (bigNum * smallNum) / GCD(bigNum, smallNum);
+
+            return result;
+        }
+    }
 }
