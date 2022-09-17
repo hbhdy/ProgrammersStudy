@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Level_1
 {
     public class Program
     {
-        public static void Main(string[] args)
-        {
-            CharactersBasicDealWith.solution("1234");
-        }
+        //public static void Main(string[] args)
+        //{
+        //    CharactersBasicDealWith.solution("1234");
+        //}
     }
 
     // 직사각형 별찍기

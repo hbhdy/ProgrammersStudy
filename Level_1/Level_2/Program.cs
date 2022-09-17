@@ -10,7 +10,9 @@ namespace Level_2
     {
         public static void Main(string[] args)
         {
-            
+            long data = MaxDistanceJump.solution(4);
+
+            Console.WriteLine("정답은 ? : "+ data.ToString());
         }
     }
 
@@ -134,6 +136,34 @@ namespace Level_2
 
             return answer;
         }
+    }
+
+    // 멀리 뛰기
+    public class MaxDistanceJump
+    {
+        public static long solution(int n)
+        {
+            // 정리해보니 피보나치였음.. ㄷㄷ
+            long answer = 0;
+            
+            // 다음 수부터 처리   
+            long first = 1;
+            long second = 1;
+
+            if (n == 1)
+                return 1;
+
+            for (int i = 2; i <= n; i++)
+            {
+                answer = (first % 1234567) + (second % 1234567);
+                first = second % 1234567;
+                second = answer;
+            }
+
+            answer %= 1234567;         
+
+            return answer;
+        }  
     }
 
     // 최댓값과 최솟값
