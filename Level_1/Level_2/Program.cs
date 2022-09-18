@@ -40,7 +40,7 @@ namespace Level_2
         }
 
 
-        public void BFS(int i,int j, int[,] maps)
+        public void BFS(int i, int j, int[,] maps)
         {
             queue.Enqueue(new KeyValuePair<int, int>(i, j));
 
@@ -58,7 +58,7 @@ namespace Level_2
                     if ((x >= 0 && n > x) && (y >= 0 && m > y) && maps[x, y] == 1)
                     {
                         queue.Enqueue(new KeyValuePair<int, int>(x, y));
-                        
+
                         // 누적 처리
                         maps[x, y] = maps[keyValue.Key, keyValue.Value] + 1;
                     }
@@ -143,7 +143,7 @@ namespace Level_2
         {
             // 정리해보니 피보나치였음.. ㄷㄷ
             long answer = 0;
-            
+
             // 다음 수부터 처리   
             long first = 1;
             long second = 1;
@@ -158,10 +158,10 @@ namespace Level_2
                 second = answer;
             }
 
-            answer %= 1234567;         
+            answer %= 1234567;
 
             return answer;
-        }  
+        }
     }
 
     // 최댓값과 최솟값
@@ -276,15 +276,15 @@ namespace Level_2
     {
         public int[,] solution(int[,] arr1, int[,] arr2)
         {
-            int[,] answer = new int[arr1.GetLength(0),arr2.GetLength(1)];
+            int[,] answer = new int[arr1.GetLength(0), arr2.GetLength(1)];
 
-            for(int i = 0; i < arr1.GetLength(0); i++)
+            for (int i = 0; i < arr1.GetLength(0); i++)
             {
-                for(int j = 0; j < arr2.GetLength(1); j++)
+                for (int j = 0; j < arr2.GetLength(1); j++)
                 {
-                    for(int q = 0; q < arr2.GetLength(0); q++)
+                    for (int q = 0; q < arr2.GetLength(0); q++)
                     {
-                        answer[i,j] += arr1[i, q] * arr2[q, j];
+                        answer[i, j] += arr1[i, q] * arr2[q, j];
                     }
                 }
             }
@@ -425,6 +425,217 @@ namespace Level_2
             int result = (bigNum * smallNum) / GCD(bigNum, smallNum);
 
             return result;
+        }
+    }
+
+    // 위장
+    public class Camouflage
+    {
+        public int solution(string[,] clothes)
+        {
+            Dictionary<string, int> dicData = new Dictionary<string, int>();
+
+            // 해당 부위별 옷의 개수
+            for (int i = 0; i < clothes.GetLength(0); i++)
+            {
+                if (!dicData.ContainsKey(clothes[i, 1]))
+                {
+                    dicData.Add(clothes[i, 1], 1);
+                }
+                else
+                    dicData[clothes[i, 1]] += 1;
+            }
+
+            int answer = 1;
+
+            // 경우의 수 처리 (해당 종류의 옷개수 + 1), +1은 안입을 수 있기 때문이다.
+            foreach (KeyValuePair<string, int> data in dicData)
+            {
+                answer *= (data.Value + 1);
+            }
+
+            // 옷을 전부 안입을 수는 없기때문에 -1 처리
+            answer -= 1;
+
+            return answer;
+        }
+    }
+
+    // 다리를 지나는 트럭
+    public class BridgeMoveTruck
+    {
+        public int solution(int bridge_length, int weight, int[] truck_weights)
+        {
+            int[] move = new int[truck_weights.Length];
+            int index = 0;
+            int answer = 0;
+
+            while (true)
+            {
+                int sum = 0;
+                for (int i = 0; i <= index; i++)
+                {
+                    // 0부터 현재 트럭까지 검사 ( 트럭이동이 다리 길이보다 짧을 경우, 현재 이동중이라는 트럭으로 판단 )
+                    // sum에 더하는 것으로 이동중인 트럭으로 판단
+                    if (move[i] > 0 && move[i] < bridge_length)
+                    {
+                        sum += truck_weights[i];
+                    }
+                }
+
+                // 다음턴부터 체크, 트럭 무게 체크가 마지막인지, 합산된 무게+ 현재 진입할 트럭의 무게가 다리가 버티는 무게보다 적은지 판단
+                if (answer > 0 && index < truck_weights.Length - 1 && sum + truck_weights[index + 1] <= weight)
+                    index++;
+
+                // 진입을 했던 트럭에서 아직 지나가는중인 트럭은 이동++
+                for (int i = 0; i <= index; i++)
+                {
+                    if (move[i] <= bridge_length)
+                    {
+                        move[i]++;
+                    }
+                }
+
+                answer++;
+
+                // 마지막 트럭의 이동이 다리길이보다 크면 모든 트럭 지나감
+                if (move[truck_weights.Length - 1] > bridge_length)
+                    break;
+            }
+
+            return answer;
+        }
+    }
+
+    // 주식가격
+    public class StockPrice
+    {
+        public int[] solution(int[] prices)
+        {
+            int[] answer = new int[prices.Length];
+            int count = 0;
+
+            while (true)
+            {
+                int num = 0;
+                for (int i = count + 1; i < prices.Length; i++)
+                {
+                    num++;
+                    if (prices[i] < prices[count])
+                        break;
+                }
+
+                answer[count] = num;
+
+                count++;
+                if (prices.Length == count)
+                    break;
+            }
+            return answer;
+        }
+    }
+
+    // 기능개발
+    public class FunctionDevelopment
+    {
+        public int[] solution(int[] progresses, int[] speeds)
+        {
+            Queue<int> data = new Queue<int>(progresses);
+            List<int> lists = new List<int>();
+            int num = 0;
+            int day = 1;
+
+            int count = 0;
+
+            bool check = false;
+            while (true)
+            {
+                if (data.Peek() + day * speeds[num] >= 100)
+                {
+                    check = true;
+                    data.Dequeue();
+                    count++;
+                    num++;
+                }
+                else
+                {
+                    check = false;
+                    day++;
+                }
+
+                if (!check)
+                {
+                    if (count != 0)
+                    {
+                        lists.Add(count);
+                        count = 0;
+                    }
+                }
+
+                if (data.Count == 0)
+                {
+                    lists.Add(count);
+                    break;
+                }
+            }
+
+            int[] answer = lists.ToArray();
+            return answer;
+        }
+    }
+
+    // 프린트
+    public class Printer
+    {
+        public class Paper
+        {
+            // 우선 순위
+            public int priority = 0;
+            // 위치
+            public int location = 0;
+
+            public Paper(int pr, int lo)
+            {
+                priority = pr;
+                location = lo;
+            }
+        }
+
+        public int solution(int[] priorities, int location)
+        {
+            Queue<Paper> que = new Queue<Paper>();
+
+            for (int i = 0; i < priorities.Length; i++)
+            {
+                // 우선순위와 위치 초기화
+                Paper data = new Paper(priorities[i], i);
+                que.Enqueue(data);
+            }
+
+            int count = 1;
+
+            while (que.Count > 0)
+            {
+                // 현재 큐의 우선순위 최대값
+                int max = que.Max(x => x.priority);
+
+                // 이후에 큐를 빼줘야 최대값 찾기 가능
+                Paper temp = que.Dequeue();
+
+                if (max == temp.priority)
+                {
+                    if (location == temp.location)
+                        break;
+                    count++;
+                }
+                // 우선순위가 아닐때 다시 뒤로간다.
+                else
+                {
+                    que.Enqueue(temp);
+                }
+            }
+
+            return count;
         }
     }
 }
