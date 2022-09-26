@@ -638,4 +638,29 @@ namespace Level_2
             return count;
         }
     }
+
+    // 배열 자르기 
+    public class ArraySlide
+    {
+        //                               3         2          5
+        public static int[] solution(int n, long left, long right)
+        {
+            List<int> data = new List<int>();
+
+            // n * n의 배열 개수에서 Left에서 Right의 배열 인덱스를 체크
+            // 나눗셈의 값은 행
+            // 나눗셈의 나머지는 열
+            // 위의 수로 이뤄짐을 알 수 있음
+
+            for (long i = left; i <= right; i++)
+            {
+                int rowNum = (int)(i / n); // 행
+                int colNum = (int)(i % n); // 열
+
+                data.Add(rowNum > colNum ? (int)rowNum + 1 : (int)colNum + 1);
+            }
+
+            return data.ToArray();
+        }
+    }
 }
